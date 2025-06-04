@@ -9,6 +9,7 @@ import logging
 from typing import Optional
 from pydantic import ValidationError
 
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -25,6 +26,8 @@ class CurrencyService:
         Получает текущий курс USD/RUB с учетом ограничения по времени
         """
         # Проверяем интервал между запросами
+        # Добавьте в начало get_usd_to_rub_rate:
+        logger.info(f"currency_min_request_interval = {currency_settings.currency_min_request_interval}")
         if not cls._can_make_request():
             latest_rate = CurrencyRate.objects.first()
             if latest_rate:
@@ -32,6 +35,8 @@ class CurrencyService:
                 return latest_rate.rate
             else:
                 raise Exception("No cached rate available and too early for new request")
+
+        cache.set(cls.CACHE_KEY, time.time(), timeout=currency_settings.cache_timeout)
 
         # Валидируем запрос
         try:
@@ -71,9 +76,6 @@ class CurrencyService:
             source=rate_data.source
         )
 
-        # Обновляем кэш времени последнего запроса
-        cache.set(cls.CACHE_KEY, time.time(), timeout=currency_settings.cache_timeout)
-
         logger.info(f"Successfully fetched and saved USD/RUB rate: {rate_value}")
         return rate_obj.rate
 
@@ -89,7 +91,17 @@ class CurrencyService:
         current_time = time.time()
         time_passed = current_time - last_request_time
 
-        return time_passed >= currency_settings.min_request_interval
+        min_interval = currency_settings.currency_min_request_interval
+
+        # Добавляем логирование для отладки
+        logger.debug(f"Time passed: {time_passed:.2f}s, min interval: {min_interval}s")
+
+        can_request = time_passed >= min_interval
+        if not can_request:
+            remaining_time = min_interval - time_passed
+            logger.info(f"Rate limit active. Need to wait {remaining_time:.2f} more seconds")
+
+        return can_request
 
     @classmethod
     def _fetch_from_api(cls, request_data: CurrencyRateRequest) -> Optional[Decimal]:
@@ -175,7 +187,7 @@ class CurrencyService:
         """
         return {
             "api_url": str(currency_settings.currency_api_url),
-            "min_interval": currency_settings.min_request_interval,
+            "min_interval": currency_settings.currency_min_request_interval,
             "cache_timeout": currency_settings.cache_timeout,
             "request_timeout": currency_settings.request_timeout,
             "max_retries": currency_settings.max_retries,
