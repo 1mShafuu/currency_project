@@ -15,6 +15,8 @@ class CurrencyAPISettings(BaseSettings):
     max_retries: int = Field(default=3, description="Максимальное количество повторных попыток запроса")
     retry_delay: int = Field(default=1, description="Задержка между повторными попытками в секундах")
     rate_limit_delay: int = Field(default=60, description="Задержка при превышении лимита запросов в секундах")
+    min_request_interval: int = Field(default=10,
+                                      description="Минимальный интервал между запросами в секундах")
 
     # Django настройки
     debug: bool = Field(default=False, description="Режим отладки")
