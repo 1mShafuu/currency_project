@@ -60,6 +60,7 @@
     http://localhost:8000/get-current-usd/
 
 ### 7. Пример вывода:
+```json
 {
   "current_rate": {
     "currency_pair": "USD/RUB",
