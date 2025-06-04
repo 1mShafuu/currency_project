@@ -53,42 +53,11 @@
 
 ### 6. Тестируйте API:
 
-    С помощью curl:  
-        ```curl http://localhost:8000/get-current-usd/
+    #С помощью curl:  
+    curl http://localhost:8000/get-current-usd/
 
-    Или откройте в браузере:  
-        ```http://localhost:8000/get-current-usd/
+    #Или откройте в браузере:  
+    http://localhost:8000/get-current-usd/
 
 ### 7. Пример вывода:
-``
-{
-  "current_rate": {
-    "currency_pair": "USD/RUB",
-    "rate": 78.9107813558,
-    "timestamp": "2025-06-04T17:03:58.506207+00:00"
-  },
-  "last_10_requests": [
-    {
-      "rate": 78.9108,
-      "timestamp": "2025-06-04T17:03:58.506207+00:00",
-      "source": "currencyapi.com"
-    },
-    {
-      "rate": 78.9108,
-      "timestamp": "2025-06-04T15:07:18.203004+00:00",
-      "source": "currencyapi.com"
-    },
-    {
-      "rate": 78.9108,
-      "timestamp": "2025-06-04T15:06:17.284409+00:00",
-      "source": "currencyapi.com"
-    },
-    {
-      "rate": 78.9108,
-      "timestamp": "2025-06-04T15:04:38.763728+00:00",
-      "source": "currencyapi.com"
-    }
-  ],
-  "status": "success"
-}
-``
+<pre lang="md"> ```json { "current_rate": { "currency_pair": "USD/RUB", "rate": 78.9107813558, "timestamp": "2025-06-04T17:03:58.506207+00:00" }, "last_10_requests": [ { "rate": 78.9108, "timestamp": "2025-06-04T17:03:58.506207+00:00", "source": "currencyapi.com" }, { "rate": 78.9108, "timestamp": "2025-06-04T15:07:18.203004+00:00", "source": "currencyapi.com" }, { "rate": 78.9108, "timestamp": "2025-06-04T15:06:17.284409+00:00", "source": "currencyapi.com" }, { "rate": 78.9108, "timestamp": "2025-06-04T15:04:38.763728+00:00", "source": "currencyapi.com" } ], "status": "success" } ``` </pre>
