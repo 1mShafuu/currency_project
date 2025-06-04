@@ -1,6 +1,6 @@
-# 💱 Django Currency API
+# Django Currency API
 
-## 📌 Подзадачи
+## Подзадачи
 
 ### 1. Настройка Django проекта
 - Создание базового проекта и приложения  
